@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Regalías: presupuesto 2025-2026 frente al proyecto 2027-2028</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#eef2f3; --surface:#fbfcfc; --ink:#13242b; --muted:#5b6b72; --line:#d6dfe2;
+  --s25:#8da0ad; --s27:#0a6a78; --c-hid:#0a6a78; --c-min:#c99a2e;
+  --c-rend:#6b5aa8; --neg:#b3261e; --pos:#1c7a45; --hl:#f3e3b3; --hlink:#8a5b00;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1a1f; --surface:#162329; --ink:#e6eef0; --muted:#93a5ac; --line:#26373e;
+    --s25:#7f95a3; --s27:#3fc1d0; --c-hid:#3fc1d0; --c-min:#e0b44f;
+    --c-rend:#b79cf0; --neg:#ff8a80; --pos:#6fd49a; --hl:#3a3115; --hlink:#f0c36a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1a1f; --surface:#162329; --ink:#e6eef0; --muted:#93a5ac; --line:#26373e;
+  --s25:#7f95a3; --s27:#3fc1d0; --c-hid:#3fc1d0; --c-min:#e0b44f;
+  --c-rend:#b79cf0; --neg:#ff8a80; --pos:#6fd49a; --hl:#3a3115; --hlink:#f0c36a;
+}
+html{height:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0; min-height:100%; background:var(--bg); color:var(--ink);
+  font-family:'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif; font-size:15px; line-height:1.55}
+h1,h2,h3{font-family:'Bricolage Grotesque','Public Sans',system-ui,sans-serif; line-height:1.15; margin:0; letter-spacing:-.01em}
+.wrap{max-width:1180px; margin:0 auto; padding:20px 16px 56px}
+header.top{display:flex; flex-wrap:wrap; gap:12px 24px; align-items:flex-end; justify-content:space-between; margin-bottom:18px}
+header.top h1{font-size:clamp(22px,3.4vw,30px); font-weight:700}
+header.top p{margin:4px 0 0; color:var(--muted); max-width:62ch; font-size:14px}
+.unit{display:flex; align-items:center; gap:8px; font-size:14px; color:var(--muted)}
+.unit input{width:18px; height:18px; accent-color:var(--s27)}
+nav.tabs{display:flex; gap:4px; overflow-x:auto; border-bottom:1px solid var(--line); margin-bottom:22px; -webkit-overflow-scrolling:touch}
+nav.tabs button{font:inherit; font-weight:500; color:var(--muted); background:none; border:0; border-bottom:3px solid transparent;
+  padding:10px 14px; cursor:pointer; white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--s27)}
+nav.tabs button:focus-visible, .btn:focus-visible, select:focus-visible, th button:focus-visible, input:focus-visible{outline:3px solid var(--s27); outline-offset:2px}
+section.panel{display:none}
+section.panel.on{display:block}
+.hero{padding:6px 0 22px; border-bottom:1px solid var(--line); margin-bottom:22px}
+.hero h2{font-size:clamp(26px,4.6vw,44px); font-weight:700; max-width:24ch}
+.hero p{max-width:70ch; color:var(--muted); margin:12px 0 0}
+.grid{display:grid; gap:16px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+.card h3{font-size:17px; margin-bottom:4px}
+.card .sub{color:var(--muted); font-size:13.5px; margin:0 0 10px}
+.kpi .lbl{color:var(--muted); font-size:13.5px}
+.kpi .val{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:26px; margin:2px 0}
+.kpi .was{color:var(--muted); font-size:13px}
+.d{display:inline-block; font-weight:600; font-size:13px; padding:1px 8px; border-radius:99px; font-variant-numeric:tabular-nums}
+.d.neg{color:var(--neg); background:color-mix(in srgb,var(--neg) 13%,transparent)}
+.d.pos{color:var(--pos); background:color-mix(in srgb,var(--pos) 13%,transparent)}
+.d.zero{color:var(--muted); background:color-mix(in srgb,var(--muted) 14%,transparent)}
+.chartbox{position:relative; height:320px}
+.chartbox.tall{height:760px}
+.chartbox.mid{height:380px}
+ul.finds{margin:0; padding:0; list-style:none; display:grid; gap:12px}
+ul.finds li{padding-left:14px; border-left:3px solid var(--s27)}
+ul.finds b{font-weight:600}
+.tblwrap{overflow-x:auto}
+table.tbl{width:100%; border-collapse:collapse; font-size:14px}
+.tbl th,.tbl td{padding:8px 10px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top}
+.tbl th{font-weight:600; color:var(--muted); font-size:13px; white-space:nowrap}
+.tbl td.n,.tbl th.n{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+.tbl tr.l0 td{font-weight:600; background:color-mix(in srgb,var(--s27) 7%,transparent)}
+.tbl tr.l2 td:first-child{padding-left:34px; color:var(--muted)}
+.tbl tr.l1 td:first-child{padding-left:20px}
+.tbl tr.tot td{font-weight:700; border-top:2px solid var(--ink); background:color-mix(in srgb,var(--s27) 12%,transparent)}
+.tbl tr.sel td{background:var(--hl)}
+.tbl tr.clk{cursor:pointer}
+.tbl tr.clk:hover td{background:color-mix(in srgb,var(--s27) 8%,transparent)}
+th button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; font-weight:600}
+.tools{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; margin-bottom:12px}
+.btn{font:inherit; font-size:14px; padding:6px 12px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer}
+.btn[aria-pressed="true"]{background:var(--s27); color:#fff; border-color:var(--s27)}
+select,input[type=search]{font:inherit; font-size:14px; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink)}
+.legend{display:flex; gap:16px; font-size:13px; color:var(--muted); margin-bottom:6px}
+.legend i{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px}
+.note{font-size:13px; color:var(--muted); margin-top:10px; max-width:90ch}
+.callout{background:var(--hl); color:var(--ink); border-radius:10px; padding:12px 16px; font-size:14px; margin-bottom:16px}
+.callout b{color:var(--hlink)}
+footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); max-width:95ch}
+.rd td{vertical-align:top}
+@media (max-width:640px){ .g2{grid-template-columns:1fr} .chartbox.tall{height:820px} }
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <h1>Regalías: presupuesto 2025-2026 frente al proyecto 2027-2028</h1>
+    <p>Compara la Ley 2441 de 2024 con el texto propuesto del 1 de octubre de 2026. Cifras en pesos corrientes: 1 bill. es un billón, 1 mil M es mil millones y 1 M es un millón.</p>
+  </div>
+  <label class="unit"><input type="checkbox" id="exact"> Ver pesos exactos</label>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Secciones del tablero">
+  <button role="tab" aria-selected="true" data-tab="resumen">Resumen</button>
+  <button role="tab" aria-selected="false" data-tab="ingresos">Ingresos</button>
+  <button role="tab" aria-selected="false" data-tab="asignaciones">Asignaciones</button>
+  <button role="tab" aria-selected="false" data-tab="territorio">Territorio</button>
+  <button role="tab" aria-selected="false" data-tab="articulado">Cambios en el articulado</button>
+</nav>
+
+<section class="panel on" id="p-resumen"></section>
+<section class="panel" id="p-ingresos"></section>
+<section class="panel" id="p-asignaciones"></section>
+<section class="panel" id="p-territorio"></section>
+<section class="panel" id="p-articulado"></section>
+
+<footer>
+  Fuentes: Ley 2441 del 27 de diciembre de 2024 (PDF escaneado, leído por reconocimiento de texto: conviene verificar las cifras que se citen en público contra el original) y texto propuesto del proyecto de ley de presupuesto bienal del SGR 2027-2028 (1 de octubre de 2026). Los montos por departamento suman solo departamentos: excluyen corporaciones autónomas, «otros por distribuir» e indeterminados. Los montos por municipio (por ejemplo, Barrancabermeja) están en los Anexos 1 a 4 de cada ley, que no vienen en los archivos cargados.
+</footer>
+</div>
+
+<script>
+/* ============ DATOS ============ */
+const INC={tot:[25536162427940,21425657521636],hid:[17244091785783,14129046654234],min:[8292070642157,7296610867402]};
+
+const ROWS=[
+ {id:'adm_ssec',l:'Administración del SGR y SSEC',a:766084872838,b:642769725648,lv:0},
+ {id:'adm',l:'Administración del Sistema',a:510723248559,b:428513150432,lv:1},
+ {id:'ssec',l:'Seguimiento, Evaluación y Control (SSEC)',a:255361624279,b:214256575216,lv:1},
+ {id:'dnp',l:'DNP',a:102144649712,b:85702630087,lv:2},
+ {id:'cgr',l:'Contraloría General',a:127680812139,b:107128287608,lv:2},
+ {id:'pgn',l:'Procuraduría General',a:25536162428,b:21425657521,lv:2},
+ {id:'inv',l:'Inversión del SGR',a:23620950245846,b:19818733207514,lv:0},
+ {id:'dir',l:'Asignaciones directas',a:6384040606985,b:5356414380410,lv:1,main:1},
+ {id:'dir20',l:'Directas (20 % del SGR)',a:5107232485588,b:4285131504327,lv:2},
+ {id:'dir5',l:'Directas anticipadas (5 % del SGR)',a:1276808121397,b:1071282876083,lv:2},
+ {id:'loc',l:'Inversión local',a:3830424364192,b:3213848628247,lv:1,main:1},
+ {id:'locnbi',l:'Según NBI y categorías 4, 5 y 6',a:2806254009749,b:2354536923912,lv:2},
+ {id:'locamb',l:'Ambiente y desarrollo sostenible',a:431731386115,b:362236449832,lv:2},
+ {id:'locet',l:'Grupos étnicos',a:592438968328,b:497075254503,lv:2},
+ {id:'reg',l:'Inversión regional',a:8682295225500,b:7284723557356,lv:1,main:1},
+ {id:'regdep',l:'Departamentos',a:5209377135300,b:4370834134414,lv:2},
+ {id:'regreg',l:'Regiones',a:3472918090200,b:2913889422942,lv:2},
+ {id:'amb',l:'Asignación ambiental',a:255361624280,b:214256575216,lv:1,main:1},
+ {id:'ctei',l:'Ciencia, tecnología e innovación',a:2553616242794,b:2142565752163,lv:1,main:1},
+ {id:'cteiconv',l:'Convocatorias',a:2042892994235,b:1714052601731,lv:2},
+ {id:'cteiamb',l:'Convocatorias de ambiente y desarrollo sostenible',a:510723248559,b:428513150432,lv:2},
+ {id:'paz',l:'Asignación para la Paz',a:1787531369956,b:1499796026514,lv:1,main:1},
+ {id:'car',l:'CAR del Río Grande de la Magdalena',a:127680812139,b:107128287608,lv:1,main:1},
+ {id:'aho',l:'Ahorro (FAE y FONPET)',a:1149127309256,b:964154588474,lv:0},
+ {id:'fae',l:'Fondo de Ahorro y Estabilización (FAE)',a:574563654628,b:482077294237,lv:1},
+ {id:'fonpet',l:'FONPET (pensiones territoriales)',a:574563654628,b:482077294237,lv:1}
+];
+const R=id=>ROWS.find(r=>r.id===id);
+const ETNAMB=[78991862443,66276700600];
+const TOTGASTO=[25536162427940,21425657521636];
+const CONS={rend:[5166208978815,6094430190344],sin:[8369428773,17470435804],pazR:[3616346285171,4266101133241],incR:[1549862693644,1828329057103],reint:243268848564,saldos:1966545326};
+const TOTCONS=[0,1].map(i=>INC.tot[i]+CONS.rend[i]+CONS.sin[i]);
+const MEMO25=TOTCONS[0]+CONS.reint+CONS.saldos;
+function totRows(){
+  const rows=[]; const add=(id,l,a,b,lv,main)=>rows.push({id,l,a,b,lv,main});
+  const cp=id=>{const r=R(id); add(r.id,r.l,r.a,r.b,r.lv,r.main);};
+  add('tot','Total de gastos (igual al total de ingresos)',TOTCONS[0],TOTCONS[1],0);
+  ['adm_ssec','adm','ssec','dnp','cgr','pgn'].forEach(cp);
+  add('inv','Inversión del SGR (con rendimientos y mineral sin origen)',R('inv').a+CONS.rend[0]+CONS.sin[0],R('inv').b+CONS.rend[1]+CONS.sin[1],0);
+  add('dir','Asignaciones directas',R('dir').a+CONS.sin[0],R('dir').b+CONS.sin[1],1,1);
+  cp('dir20'); cp('dir5');
+  add('sin','Mineral sin identificación de origen (art. 7)',CONS.sin[0],CONS.sin[1],2);
+  ['loc','locnbi','locamb','locet','reg','regdep','regreg','amb','ctei','cteiconv','cteiamb'].forEach(cp);
+  add('paz','Asignación para la Paz (con rendimientos)',R('paz').a+CONS.pazR[0],R('paz').b+CONS.pazR[1],1,1);
+  add('paz_o','Presupuesto ordinario',R('paz').a,R('paz').b,2);
+  add('paz_r','Rendimientos financieros',CONS.pazR[0],CONS.pazR[1],2);
+  add('inc','Incentivos a la producción (Acto Legislativo 04 de 2017)',CONS.incR[0],CONS.incR[1],1,1);
+  cp('car'); ['aho','fae','fonpet'].forEach(cp);
+  return rows;
+}
+
+
+const OTROS=[
+ {l:'Rendimientos financieros de la Cuenta Única',a:5166208978815,b:6094430190344,t:'Corte al 31 de agosto de 2024 y de 2026'},
+ {l:'Destino a la Asignación para la Paz',a:3616346285171,b:4266101133241,sub:1},
+ {l:'Destino a incentivos a la producción (Acto Legislativo 04 de 2017)',a:1549862693644,b:1828329057103,sub:1},
+ {l:'Regalías por mineral sin identificación de origen',a:8369428773,b:17470435804,t:'Se destinan a asignaciones directas'},
+ {l:'Reintegros a la Cuenta Única',a:243268848564,b:null,t:'El texto 2027-2028 no fija monto: se incorporan por decreto de cierre (art. 13)'},
+ {l:'Saldos sin distribuir causados a 2011',a:1966545326,b:null,t:'El texto 2027-2028 no fija monto: el Ministerio de Hacienda puede adicionarlos en el decreto de cierre (art. 19)'}
+];
+
+const NAMES=['Antioquia','Atlántico','Bogotá D.C.','Bolívar','Boyacá','Caldas','Caquetá','Cauca','Cesar','Córdoba','Cundinamarca','Chocó','Huila','La Guajira','Magdalena','Meta','Nariño','Norte de Santander','Quindío','Risaralda','Santander','Sucre','Tolima','Valle del Cauca','Arauca','Casanare','Putumayo','San Andrés y Providencia','Amazonas','Guainía','Guaviare','Vaupés','Vichada'];
+const RAW={
+ d20:[
+  [211029646666,10814554586,118450205,128707368449,188435297932,7608365084,129743103,3491276803,681916580456,200819321339,18898123516,30887980545,126447238333,594077747991,95478565137,1201894721754,3313520532,40166376238,23322207,518080800,267427920266,104731029474,40483218897,687865878,157966488315,705495873811,76000760525,459371519,0,274878533,3801916,4298236,21863997],
+  [269751319663,3821667348,149025467,104866713976,112104714925,9533014389,28275278,2563856154,635790904177,168103239426,22830555835,92068953081,141645882704,274226892843,91041894933,1227095944097,14225021617,34318730545,13887288,177993095,219744784322,103699686979,39122837477,1129567535,125886198179,473101792443,46996570238,244097449,0,2843516,999556,373724,162790239]],
+ d5:[
+  [53928512479,2348319194,29612551,16485453331,49697285611,1902091270,32435776,899208294,196704304717,31852223984,4724530883,7721995135,33495118089,153935252339,3689796467,325469788811,458724059,11038702428,5830551,129520200,72304725894,5389122586,10769493808,172265212,42899531998,189176359525,24279396471,0,0,68719633,950479,1074559,5466000],
+  [72104183360,445042947,32948483,16002221760,28124674707,2584451208,6458353,583146712,180523450524,27500102872,4483640022,22697143263,37507544042,79878797832,5015509833,333116403051,634650799,6756563298,3304629,51093500,58740396619,5422718099,10494907382,122978547,34046674246,127222346842,15023193329,0,0,890115,239334,71446,52294841]],
+ loc:[
+  [277753833439,59240150987,0,197035920574,157894493032,49112752524,50424802643,130736375968,102194541476,183494686030,146434287827,147549333314,76909210583,95170479422,135240718062,67532292909,177527775557,109984205426,17113192517,27202793327,130169425771,113200028370,98119076214,73803028791,31655687110,40647372599,37763100874,4499213183,8226148309,10984301403,14504713158,12017864768,22112203582],
+  [233156697853,51694537172,0,166762618418,129740031312,40722310385,41980706861,110163563663,87240757643,153853164179,116323912502,122741927280,67833583978,80189160042,113920281395,56736554571,149473249625,93427178533,14191986546,23106307290,111101890251,95119941719,82304846185,60700063564,25108725404,33898243588,31876298205,3822680387,6939074664,9514268568,11200726808,9830852734,19860782587]],
+ reg:[
+  [254251117588,183278268351,154508691924,256126973636,128678181475,109924922368,126499992689,183419969644,203096063873,283741344357,154855701453,256458299307,136728202174,282119360428,218508430201,141159783462,202567311209,194944704452,77251346703,100837107213,159281965533,197950088954,145903296018,169485534049,145341174030,108104005835,119718779706,47204245602,74034165598,91454100143,75719095718,88859532389,137365379218],
+  [211987889679,155271808687,127959755643,217538712063,107481875269,91882180297,106934956880,155592086241,173859343490,242426797948,128833292261,208461092226,115401118832,234893547696,187597983133,118070137606,169371994622,164352057332,63002930336,86466674998,134058833874,169162538087,122903772674,141484753362,113071617553,90786684887,98770943224,40015464759,62360119146,75027714768,60408414992,70140980902,125256060947]]
+};
+const D=NAMES.map((n,i)=>{
+  const g=k=>[RAW[k][0][i],RAW[k][1][i]];
+  const d20=g('d20'),d5=g('d5'),loc=g('loc'),reg=g('reg');
+  const dir=[d20[0]+d5[0],d20[1]+d5[1]];
+  const tot=[dir[0]+loc[0]+reg[0],dir[1]+loc[1]+reg[1]];
+  return {n,i,d20,d5,dir,loc,reg,tot};
+});
+const REGIONES=[
+ ['Caribe',1114683183601,947177463908],['Centro-Oriente',528179496559,441790542921],['Eje Cafetero',361509662580,302226450207],
+ ['Pacífico',541287409473,449939950967],['Centro-Sur-Amazonía',401922957456,337580607171],['Llano',525335380531,435174407768]
+];
+
+const ARTI=[
+ {t:'Control político y rendición de cuentas',
+  a:'Art. 26 y parágrafo: Hacienda, Minas y Energía y el DNP radican cada cuatro meses un informe ante las Comisiones Económicas, con citación y presencia de la Contraloría; el SSEC informa cada trimestre sobre situaciones irregulares.',
+  b:'No aparece en el texto propuesto.',
+  c:'Candidato claro a proposición aditiva: es una herramienta de control político con enfoque regional y encaja con el rol de la Senadora en Comisión Cuarta.'},
+ {t:'Crédito público con la Asignación Regional',
+  a:'Art. 25: permitía operaciones de crédito público con cargo a la Inversión Regional, vía patrimonio autónomo, con vigencias futuras como garantía y plazo hasta de cuatro bienalidades.',
+  b:'No aparece.',
+  c:'Decisión de fondo: reponerlo o dejarlo fuera. Comprometer regalías futuras tiene riesgo fiscal para las regiones; conviene definir postura antes del debate.'},
+ {t:'Ciencia, tecnología e innovación',
+  a:'Art. 23: al menos el 50 % de la asignación de CTeI para proyectos de investigación y desarrollo según demandas territoriales (CODECTI), y convocatorias que garanticen participación de todos los departamentos y del Distrito Capital.',
+  b:'No aparece.',
+  c:'Sin la garantía de participación territorial, las convocatorias podrían concentrarse. Tema defendible desde la agenda regional.'},
+ {t:'Emprendimiento y empleo',
+  a:'Art. 18: distribución del 5 % del mayor recaudo para proyectos de emprendimiento y generación de empleo, asignados a municipios en un máximo de seis meses.',
+  b:'No aparece.',
+  c:'Verificar si la regla sigue vigente por la Ley 2056 (art. 24) y, si es así, pedir que el texto la reitere.'},
+ {t:'Educación superior (Icetex)',
+  a:'Art. 19 y parágrafo: cofinanciación de convocatorias nacionales y apoyos financieros del Icetex para ampliar cobertura de educación superior en poblaciones vulnerables.',
+  b:'Art. 17 mantiene la cofinanciación de convocatorias o programas nacionales, sin el parágrafo del Icetex.',
+  c:'Se perdería la mención expresa a educación superior. Útil para la agenda de familia y calidad de vida regional.'},
+ {t:'Administración del SGR',
+  a:'Art. 11, parágrafos 2 y 3: la Comisión Rectora puede asignar recursos al control de la Procuraduría y destina 4 % a fortalecer departamentos y 4 % a municipios de categoría 5 y 6.',
+  b:'Art. 9 conserva el reparto 50/50 y el parágrafo de ajuste de plantas, sin las destinaciones de fortalecimiento.',
+  c:'Fortalecimiento de capacidades en municipios pequeños: punto de contacto con la ejecución real de proyectos en regiones.'},
+ {t:'Desastres y territorios afectados',
+  a:'Art. 27: instancias de aprobación pueden priorizar proyectos para atender situaciones de desastre por fenómenos naturales.',
+  b:'Art. 18: el OCAD Paz incluirá criterios diferenciadores para los territorios afectados por el sismo del 10 de agosto de 2026.',
+  c:'Cambio de enfoque: de una regla general a una regla específica. Revisar si cubre a otras regiones afectadas por emergencias.'},
+ {t:'Límite de aprobación de proyectos en 2027',
+  a:'Sin equivalente.',
+  b:'Art. 12 (nuevo): en 2027 solo se puede aprobar hasta el 60 % de la apropiación del bienio, con bloqueo en el SPGR, para dejar margen a los gobiernos territoriales que inician en enero de 2028.',
+  c:'Efecto directo en el calendario de ejecución y en la presión sobre alcaldes y gobernadores salientes. Tema de opinión pública regional.'},
+ {t:'Reintegros y cuentas maestras',
+  a:'Art. 14: el Ministerio de Hacienda incorpora reintegros por acto administrativo.',
+  b:'Art. 13, parágrafo 2 (nuevo): los saldos no aprobados en cuentas maestras deben volver a la Cuenta Única antes del 31 de diciembre de 2028.',
+  c:'Plazo duro que puede afectar a entidades con baja ejecución. Pedir cifras de saldos por departamento.'},
+ {t:'Correcciones por decreto',
+  a:'Art. 12: el Gobierno puede corregir errores de transcripción o aritméticos.',
+  b:'Art. 10: amplía a errores de transcripción, aritméticos, de registro o de cálculo.',
+  c:'Facultad más amplia para el Ejecutivo sobre la distribución. Vale la pena exigir publicidad de cada corrección.'},
+ {t:'Giro de mayor recaudo al FAE',
+  a:'Art. 22: giro fraccionado de los recursos del Decreto 443 de 2023 hasta el 31 de diciembre de 2026.',
+  b:'Art. 20: giro fraccionado de los recursos de los Decretos 443 de 2023 y 380 de 2025 hasta el 31 de diciembre de 2028.',
+  c:'Más recursos y más plazo hacia el ahorro; mientras tanto el ahorro del bienio también baja (ver pestaña Asignaciones).'}
+];
+
+/* ============ UTILIDADES ============ */
+let exact=false, currentTab='resumen', sel=20; /* Santander */
+let sortKey='totd', sortDir=-1, q='';
+let asigMode='main';
+const $=s=>document.querySelector(s);
+const L=(n,d)=>n.toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});
+function fs(v){ if(exact) return Math.round(v).toLocaleString('es-CO'); const x=Math.abs(v),s=v<0?'−':'';
+  if(x>=1e12) return s+L(x/1e12,2)+' bill.'; if(x>=1e9) return s+L(x/1e9,1)+' mil M'; if(x>=1e6) return s+L(x/1e6,1)+' M'; return s+Math.round(x).toLocaleString('es-CO'); }
+function fl(v){ if(exact) return '$ '+Math.round(v).toLocaleString('es-CO'); const x=Math.abs(v),s=v<0?'−':'';
+  if(x>=1e12) return s+'$ '+L(x/1e12,2)+' billones'; if(x>=1e9) return s+'$ '+L(x/1e9,1)+' mil millones'; if(x>=1e6) return s+'$ '+L(x/1e6,1)+' millones'; return s+'$ '+Math.round(x).toLocaleString('es-CO'); }
+const ch=(a,b)=>a?(b-a)/a:null;
+function pf(r,d=1){ if(r===null||!isFinite(r)) return 'nuevo'; return (r>0?'+':'')+L(r*100,d)+' %'; }
+function badge(r,d=1){ const c=r===null?'zero':(Math.abs(r)<0.00005?'zero':(r<0?'neg':'pos')); return `<span class="d ${c}">${pf(r,d)}</span>`; }
+const td=(v)=>`<td class="n" title="${Math.round(v).toLocaleString('es-CO')}">${fs(v)}</td>`;
+const col=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const charts={};
+function mk(id,cfg){ if(charts[id]) charts[id].destroy(); const el=document.getElementById(id); if(!el) return; charts[id]=new Chart(el,cfg); }
+function axes(fmt,horizontal){
+  const t=col('--muted'),g=col('--line');
+  const val={ticks:{color:t,callback:fmt},grid:{color:g}};
+  const cat={ticks:{color:col('--ink'),font:{size:12}},grid:{display:false}};
+  return horizontal?{x:val,y:cat}:{x:cat,y:val};
+}
+const legendOpts=()=>({labels:{color:col('--ink'),boxWidth:12,boxHeight:12}});
+const billF=v=>L(v/1e12,1)+' bill.';
+const milF=v=>L(v/1e9,0)+' mil M';
+
+/* ============ RESUMEN ============ */
+function hallazgos(){
+  const out=[];
+  const tr=ch(...TOTCONS);
+  out.push(`<b>Hay dos cifras y conviene nombrarlas.</b> Las regalías corrientes (art. 1) caen ${pf(ch(...INC.tot))}, pero el presupuesto total, que suma rendimientos financieros y mineral sin origen, cae ${pf(tr)}: de ${fl(TOTCONS[0])} a ${fl(TOTCONS[1])}. Esta segunda es la cifra de dinero que realmente se gasta.`);
+  const allR=ROWS.map(r=>ch(r.a,r.b));
+  const mn=Math.min(...allR), mx=Math.max(...allR);
+  out.push(`<b>El recorte ordinario es parejo.</b> Dentro del gasto del artículo 2, todos los rubros caen entre ${pf(mn,2)} y ${pf(mx,2)}. Las proporciones de la Ley 2056 se mantienen, así que la discusión de fondo está en cuánto se proyecta recaudar.`);
+  const sh=[INC.hid[0]/INC.tot[0],INC.hid[1]/INC.tot[1]];
+  out.push(`<b>Los hidrocarburos pesan más en la caída.</b> Bajan ${pf(ch(...INC.hid))} frente a ${pf(ch(...INC.min))} de los minerales, y su peso en las regalías corrientes pasa de ${L(sh[0]*100,1)} % a ${L(sh[1]*100,1)} %. Es un dato útil para el argumento de dependencia y volatilidad de las regalías fósiles.`);
+  const pazA=R('paz').a+CONS.pazR[0], pazB=R('paz').b+CONS.pazR[1];
+  out.push(`<b>La Paz y los incentivos a la producción suben.</b> Los rendimientos financieros crecen ${pf(ch(...CONS.rend))}. Con ellos, la Asignación para la Paz pasa de ${fl(pazA)} a ${fl(pazB)} (${pf(ch(pazA,pazB))}) y los incentivos a la producción de ${fl(CONS.incR[0])} a ${fl(CONS.incR[1])}. Sin rendimientos, la Paz ordinaria baja ${pf(ch(R('paz').a,R('paz').b))}.`);
+  const bA=R('amb').a+R('locamb').a+ETNAMB[0]+R('cteiamb').a, bB=R('amb').b+R('locamb').b+ETNAMB[1]+R('cteiamb').b;
+  out.push(`<b>La bolsa ambiental pierde ${fl(bA-bB)}.</b> Sumando la asignación ambiental, el componente ambiental de la inversión local, de grupos étnicos y de CTeI, pasa de ${fl(bA)} a ${fl(bB)}. Es una cifra concreta para la agenda ambiental de la Senadora.`);
+  const ups=[...D].sort((x,y)=>(y.dir[1]-y.dir[0])-(x.dir[1]-x.dir[0])).slice(0,3);
+  const dns=[...D].sort((x,y)=>(x.dir[1]-x.dir[0])-(y.dir[1]-y.dir[0])).slice(0,3);
+  const nm=d=>`${d.n} (${fs(d.dir[1]-d.dir[0])})`;
+  out.push(`<b>Las asignaciones directas no caen parejo.</b> Dependen de dónde se produce. Suben ${ups.map(nm).join(', ')}; caen más ${dns.map(nm).join(', ')}. Son sumas de los rubros del 20 % y del 5 %.`);
+  const s=D[20];
+  out.push(`<b>Santander.</b> Sus asignaciones directas (20 % y 5 %) pasan de ${fl(s.dir[0])} a ${fl(s.dir[1])} (${pf(ch(...s.dir))}). Sumando inversión local y regional de departamentos, el total baja ${pf(ch(...s.tot))}. El detalle de Barrancabermeja está en los anexos municipales.`);
+  const conLoc=D.filter(d=>d.loc[0]>0);
+  const negs=conLoc.filter(d=>d.loc[1]<d.loc[0]&&d.reg[1]<d.reg[0]).length;
+  out.push(negs===conLoc.length
+    ? `<b>Ningún departamento se salva en local y regional.</b> Los ${negs} departamentos con inversión local bajan tanto en ella como en la inversión regional.`
+    : `<b>Casi todo el mapa baja en local y regional.</b> ${negs} de ${conLoc.length} departamentos con inversión local bajan en ambas asignaciones.`);
+  return out;
+}
+function renderResumen(){
+  const dTot=TOTCONS[1]-TOTCONS[0], r=ch(...TOTCONS);
+  const kp=(lbl,a,b)=>`<div class="card kpi"><div class="lbl">${lbl}</div><div class="val">${fl(b)}</div><div class="was">Antes: ${fl(a)} ${badge(ch(a,b))}</div></div>`;
+  $('#p-resumen').innerHTML=`
+  <div class="hero">
+    <h2>El presupuesto total de regalías 2027-2028 baja ${L(Math.abs(r)*100,1)} %</h2>
+    <p>De ${fl(TOTCONS[0])} a ${fl(TOTCONS[1])}: ${fl(Math.abs(dTot))} menos. El total suma las regalías corrientes (${pf(ch(...INC.tot))}), los rendimientos financieros (${pf(ch(...CONS.rend))}) y el mineral sin identificación de origen. En ambos textos los ingresos igualan a los gastos.</p>
+  </div>
+  <div class="grid g4" style="margin-bottom:16px">
+    ${kp('Ingresos totales, igual a gastos totales',...TOTCONS)}
+    ${kp('Regalías corrientes (art. 1)',...INC.tot)}
+    ${kp('Rendimientos financieros (art. 6)',...CONS.rend)}
+    ${kp('Hidrocarburos',...INC.hid)}
+    ${kp('Minerales',...INC.min)}
+  </div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><h3>Qué encontré</h3><p class="sub">Calculado con las cifras de ambos documentos.</p><ul class="finds">${hallazgos().map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    <div class="grid" style="align-content:start">
+      <div class="card"><h3>Ingresos totales por fuente</h3><div class="chartbox" style="height:250px"><canvas id="c-ing"></canvas></div></div>
+      <div class="card"><h3>Dónde cambia el dinero</h3><p class="sub">Diferencia en pesos por asignación, con rendimientos incluidos.</p><div class="chartbox" style="height:300px"><canvas id="c-delta"></canvas></div></div>
+    </div>
+  </div>
+  <div class="card"><h3>Asignaciones de inversión, lado a lado</h3><p class="sub">Presupuesto total: Paz e incentivos incluyen los rendimientos financieros.</p><div class="legend"><span><i style="background:var(--s25)"></i>2025-2026</span><span><i style="background:var(--s27)"></i>2027-2028</span></div><div class="chartbox mid"><canvas id="c-asig"></canvas></div></div>`;
+  mk('c-ing',{type:'bar',data:{labels:['2025-2026','2027-2028'],datasets:[
+    {label:'Hidrocarburos',data:INC.hid,backgroundColor:col('--c-hid')},
+    {label:'Minerales',data:INC.min,backgroundColor:col('--c-min')},
+    {label:'Rendimientos financieros',data:CONS.rend,backgroundColor:col('--c-rend')},
+    {label:'Mineral sin origen',data:CONS.sin,backgroundColor:col('--muted')}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:{...axes(billF,true).x,stacked:true},y:{...axes(billF,true).y,stacked:true}},
+      plugins:{legend:legendOpts(),tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fl(c.raw)}`}}}}});
+  const T=totRows(), mains=T.filter(x=>x.main);
+  const dl=[...mains.map(x=>({l:x.l.replace(' (con rendimientos)','').replace(' (Acto Legislativo 04 de 2017)',''),d:x.b-x.a})),
+    {l:'Administración y SSEC',d:R('adm_ssec').b-R('adm_ssec').a},{l:'Ahorro (FAE y FONPET)',d:R('aho').b-R('aho').a}].sort((a,b)=>a.d-b.d);
+  mk('c-delta',{type:'bar',data:{labels:dl.map(x=>x.l),datasets:[{label:'Diferencia',data:dl.map(x=>x.d),backgroundColor:dl.map(x=>x.d<0?col('--neg'):col('--pos'))}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:axes(milF,true),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fl(c.raw)}`}}}}});
+  mk('c-asig',{type:'bar',data:{labels:mains.map(x=>x.l.replace(' (con rendimientos)','').replace(' (Acto Legislativo 04 de 2017)','')),datasets:[
+    {label:'2025-2026',data:mains.map(x=>x.a),backgroundColor:col('--s25')},
+    {label:'2027-2028',data:mains.map(x=>x.b),backgroundColor:col('--s27')}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:axes(billF,true),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fl(c.raw)}`}}}}});
+}
+
+/* ============ INGRESOS ============ */
+function renderIngresos(){
+  const cons=[['Regalías corrientes (art. 1)',INC.tot,'l1'],['Más: rendimientos financieros (art. 6)',CONS.rend,'l1'],['Más: mineral sin identificación de origen (art. 7)',CONS.sin,'l1']];
+  const rows=[['Regalías corrientes (art. 1)',INC.tot,1],['Hidrocarburos',INC.hid,0],['Minerales',INC.min,0]];
+  $('#p-ingresos').innerHTML=`
+  <div class="card" style="margin-bottom:16px"><h3>Ingresos totales del bienio</h3><p class="sub">Esta es la cifra final: lo que entra al presupuesto y, por construcción, lo que se gasta.</p>
+    <div class="tblwrap"><table class="tbl"><thead><tr><th>Concepto</th><th class="n">2025-2026</th><th class="n">2027-2028</th><th class="n">Diferencia</th><th class="n">Variación</th><th class="n">Peso 25-26</th><th class="n">Peso 27-28</th></tr></thead><tbody>
+    ${cons.map(([l,v,c])=>`<tr class="${c}"><td>${l}</td>${td(v[0])}${td(v[1])}${td(v[1]-v[0])}<td class="n">${badge(ch(...v))}</td><td class="n">${L(v[0]/TOTCONS[0]*100,1)} %</td><td class="n">${L(v[1]/TOTCONS[1]*100,1)} %</td></tr>`).join('')}
+    <tr class="tot"><td>Total de ingresos</td>${td(TOTCONS[0])}${td(TOTCONS[1])}${td(TOTCONS[1]-TOTCONS[0])}<td class="n">${badge(ch(...TOTCONS))}</td><td class="n">100 %</td><td class="n">100 %</td></tr>
+    <tr class="tot"><td>Total de gastos</td>${td(TOTCONS[0])}${td(TOTCONS[1])}${td(TOTCONS[1]-TOTCONS[0])}<td class="n">${badge(ch(...TOTCONS))}</td><td class="n">100 %</td><td class="n">100 %</td></tr>
+    </tbody></table></div>
+    <p class="note">Nota de comparabilidad: la Ley 2441 también incorporó reintegros (${fl(CONS.reint)}) y saldos sin distribuir de 2011 (${fl(CONS.saldos)}) con monto expreso. El texto 2027-2028 no los cuantifica y los deja al decreto de cierre. Con ellos, el total de 2025-2026 sería ${fl(MEMO25)}. La tabla los excluye para comparar lo equivalente.</p>
+  </div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><h3>Regalías corrientes por fuente</h3><p class="sub">Artículo 1 de cada texto.</p>
+      <div class="tblwrap"><table class="tbl"><thead><tr><th>Concepto</th><th class="n">2025-2026</th><th class="n">2027-2028</th><th class="n">Diferencia</th><th class="n">Variación</th><th class="n">Peso 25-26</th><th class="n">Peso 27-28</th></tr></thead><tbody>
+      ${rows.map(([l,v,b])=>`<tr class="${b?'l0':'l1'}"><td>${l}</td>${td(v[0])}${td(v[1])}${td(v[1]-v[0])}<td class="n">${badge(ch(...v))}</td><td class="n">${L(v[0]/INC.tot[0]*100,1)} %</td><td class="n">${L(v[1]/INC.tot[1]*100,1)} %</td></tr>`).join('')}
+      </tbody></table></div>
+      <p class="note">La caída proyectada de hidrocarburos explica ${L((INC.hid[0]-INC.hid[1])/(INC.tot[0]-INC.tot[1])*100,1)} % del recorte de regalías corrientes.</p>
+    </div>
+    <div class="card"><h3>Variación por fuente</h3><div class="chartbox mid"><canvas id="c-ivar"></canvas></div></div>
+  </div>
+  <div class="card"><h3>De dónde vienen los otros recursos y a dónde van</h3><p class="sub">Entran por artículos aparte del artículo 1, pero se gastan con destino específico.</p>
+    <div class="tblwrap"><table class="tbl"><thead><tr><th>Recurso</th><th class="n">2025-2026</th><th class="n">2027-2028</th><th class="n">Variación</th><th>Observación</th></tr></thead><tbody>
+    ${OTROS.map(o=>`<tr class="${o.sub?'l2':'l1'}"><td>${o.l}</td>${td(o.a)}${o.b===null?'<td class="n">sin monto</td>':td(o.b)}<td class="n">${o.b===null?'—':badge(ch(o.a,o.b))}</td><td>${o.t||''}</td></tr>`).join('')}
+    </tbody></table></div>
+    <p class="note">Los rendimientos financieros se destinan por mandato constitucional (Acto Legislativo 04 de 2017) a la Asignación para la Paz y a incentivos a la producción de municipios productores y con puertos.</p>
+  </div>`;
+  const items=[['Total consolidado',ch(...TOTCONS)],['Regalías corrientes',ch(...INC.tot)],['Hidrocarburos',ch(...INC.hid)],['Minerales',ch(...INC.min)],['Rendimientos financieros',ch(...CONS.rend)]];
+  mk('c-ivar',{type:'bar',data:{labels:items.map(x=>x[0]),datasets:[{data:items.map(x=>x[1]*100),backgroundColor:items.map(x=>x[1]<0?col('--neg'):col('--pos'))}]},
+    options:{responsive:true,maintainAspectRatio:false,scales:axes(v=>L(v,0)+' %',false),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${L(c.raw,1)} %`}}}}});
+}
+
+/* ============ ASIGNACIONES ============ */
+let asigView='tot';
+function renderAsignaciones(){
+  const tot=asigView==='tot';
+  const base=tot?totRows():ROWS;
+  const T=tot?TOTCONS:TOTGASTO;
+  const rows=base.filter(r=>asigMode==='main'?r.lv<=1:true);
+  const bA=R('amb').a+R('locamb').a+ETNAMB[0]+R('cteiamb').a, bB=R('amb').b+R('locamb').b+ETNAMB[1]+R('cteiamb').b;
+  const amb=[['Asignación ambiental',R('amb').a,R('amb').b],['Inversión local, ambiente y desarrollo sostenible',R('locamb').a,R('locamb').b],['Grupos étnicos, ambiente y desarrollo sostenible',ETNAMB[0],ETNAMB[1]],['CTeI, convocatorias de ambiente y desarrollo sostenible',R('cteiamb').a,R('cteiamb').b]];
+  const msg=tot
+   ?`<b>Lectura rápida:</b> el total de gastos es ${fl(TOTCONS[1])} (${pf(ch(...TOTCONS))}). Ya no todo cae parejo: Paz e incentivos a la producción suben porque se alimentan de los rendimientos financieros.`
+   :`<b>Lectura rápida:</b> en el gasto ordinario del artículo 2 la variación es casi idéntica en todas las filas, porque las asignaciones son porcentajes fijos del recaudo corriente.`;
+  $('#p-asignaciones').innerHTML=`
+  <div class="callout">${msg}</div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="tools">
+      <button class="btn" data-view="tot" aria-pressed="${tot}">Presupuesto total</button>
+      <button class="btn" data-view="ord" aria-pressed="${!tot}">Solo gasto ordinario (art. 2)</button>
+      <span style="width:12px"></span>
+      <button class="btn" data-mode="main" aria-pressed="${asigMode==='main'}">Rubros principales</button>
+      <button class="btn" data-mode="all" aria-pressed="${asigMode==='all'}">Detalle completo</button>
+    </div>
+    <div class="tblwrap"><table class="tbl"><thead><tr><th>Asignación</th><th class="n">2025-2026</th><th class="n">2027-2028</th><th class="n">Diferencia</th><th class="n">Variación</th><th class="n">Peso 25-26</th><th class="n">Peso 27-28</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr class="l${r.lv}${r.id==='tot'?' tot':''}"><td>${r.l}</td>${td(r.a)}${td(r.b)}${td(r.b-r.a)}<td class="n">${badge(ch(r.a,r.b))}</td><td class="n">${L(r.a/T[0]*100,2)} %</td><td class="n">${L(r.b/T[1]*100,2)} %</td></tr>`).join('')}
+    </tbody></table></div>
+    <p class="note">El peso es la participación sobre el gasto total de la vista elegida. En el presupuesto total, las directas incluyen el mineral sin origen y la Paz incluye los rendimientos financieros.</p>
+  </div>
+  <div class="card"><h3>Bolsa ambiental</h3><p class="sub">Suma de los rubros ambientales del gasto ordinario. Es el 5 % del recaudo corriente en los dos bienios.</p>
+    <div class="tblwrap"><table class="tbl"><thead><tr><th>Componente</th><th class="n">2025-2026</th><th class="n">2027-2028</th><th class="n">Diferencia</th><th class="n">Variación</th></tr></thead><tbody>
+    ${amb.map(x=>`<tr class="l1"><td>${x[0]}</td>${td(x[1])}${td(x[2])}${td(x[2]-x[1])}<td class="n">${badge(ch(x[1],x[2]))}</td></tr>`).join('')}
+    <tr class="l0"><td>Total ambiental</td>${td(bA)}${td(bB)}${td(bB-bA)}<td class="n">${badge(ch(bA,bB))}</td></tr>
+    </tbody></table></div>
+  </div>`;
+  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{asigMode=b.dataset.mode; renderAsignaciones();});
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{asigView=b.dataset.view; renderAsignaciones();});
+}
+
+/* ============ TERRITORIO ============ */
+function renderTerritorio(){
+  const d=D[sel];
+  const items=[['Directas 20 %',d.d20],['Directas anticipadas 5 %',d.d5],['Inversión local (NBI)',d.loc],['Inversión regional, departamentos',d.reg]];
+  let list=D.filter(x=>x.n.toLowerCase().includes(q.toLowerCase()));
+  const val=(x)=>({n:x.n,dira:x.dir[0],dirb:x.dir[1],dird:ch(...x.dir),locd:ch(...x.loc),regd:ch(...x.reg),totd:ch(...x.tot),tota:x.tot[0],totb:x.tot[1],totdel:x.tot[1]-x.tot[0]});
+  const V=list.map(x=>({x,v:val(x)}));
+  V.sort((p,r)=>{const a=p.v[sortKey],b=r.v[sortKey]; if(sortKey==='n') return sortDir*a.localeCompare(b,'es'); return sortDir*((a===null?-9:a)-(b===null?-9:b));});
+  const th=(k,l,n)=>`<th class="${n?'n':''}"><button data-sort="${k}" aria-label="Ordenar por ${l}">${l}${sortKey===k?(sortDir<0?' ▼':' ▲'):''}</button></th>`;
+  const reg=REGIONES.map(r=>({n:r[0],a:r[1],b:r[2]}));
+  $('#p-territorio').innerHTML=`
+  <div class="callout"><b>Alcance:</b> los montos corresponden a departamentos y suman cuatro conceptos: directas del 20 %, directas anticipadas del 5 %, inversión local según NBI e inversión regional de departamentos. Barrancabermeja y los demás municipios están en los anexos de cada ley.</div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="tools"><label for="dsel"><b>Departamento</b></label>
+        <select id="dsel">${D.map(x=>`<option value="${x.i}" ${x.i===sel?'selected':''}>${x.n}</option>`).join('')}</select></div>
+      <div class="tblwrap"><table class="tbl"><thead><tr><th>Concepto</th><th class="n">2025-2026</th><th class="n">2027-2028</th><th class="n">Variación</th></tr></thead><tbody>
+      ${items.map(i=>`<tr class="l1"><td>${i[0]}</td>${td(i[1][0])}${td(i[1][1])}<td class="n">${badge(ch(...i[1]))}</td></tr>`).join('')}
+      <tr class="l0"><td>Total de los cuatro conceptos</td>${td(d.tot[0])}${td(d.tot[1])}<td class="n">${badge(ch(...d.tot))}</td></tr>
+      </tbody></table></div>
+      <div class="chartbox" style="height:240px;margin-top:12px"><canvas id="c-dept"></canvas></div>
+    </div>
+    <div class="card"><h3>Variación del total por departamento</h3><p class="sub">Ordenado de la mayor caída a la mayor alza. El departamento elegido va resaltado.</p><div class="chartbox tall"><canvas id="c-rank"></canvas></div></div>
+  </div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><h3>Inversión regional por región</h3><p class="sub">Santander está en la región Centro-Oriente.</p>
+      <div class="chartbox" style="height:280px"><canvas id="c-regs"></canvas></div>
+      <div class="tblwrap"><table class="tbl" style="margin-top:8px"><thead><tr><th>Región</th><th class="n">2025-2026</th><th class="n">2027-2028</th><th class="n">Variación</th></tr></thead><tbody>
+      ${reg.map(r=>`<tr class="l1"><td>${r.n}</td>${td(r.a)}${td(r.b)}<td class="n">${badge(ch(r.a,r.b))}</td></tr>`).join('')}</tbody></table></div>
+    </div>
+    <div class="card"><h3>Lectura política</h3><ul class="finds">
+      <li><b>Quién cae más.</b> En directas, la caída se concentra en pocos departamentos productores; en local y regional baja casi todo el mapa.</li>
+      <li><b>Quién sube.</b> Algunos departamentos ganan en directas aun con un presupuesto menor. La razón está en la producción certificada que sustenta el cálculo: conviene verificarla en el Anexo 1.</li>
+      <li><b>Qué falta.</b> El municipio es la unidad que más pesa en la narrativa regional. Con los anexos 1 a 4 se puede armar el comparativo de Barrancabermeja y de los municipios petroleros del Magdalena Medio.</li>
+    </ul></div>
+  </div>
+  <div class="card"><h3>Todos los departamentos</h3>
+    <div class="tools"><input type="search" id="dq" placeholder="Buscar departamento" value="${q}" aria-label="Buscar departamento"></div>
+    <div class="tblwrap"><table class="tbl"><thead><tr>
+      ${th('n','Departamento',0)}${th('dira','Directas 25-26',1)}${th('dirb','Directas 27-28',1)}${th('dird','Directas var.',1)}${th('locd','Local var.',1)}${th('regd','Regional var.',1)}${th('totdel','Total diferencia',1)}${th('totd','Total var.',1)}
+    </tr></thead><tbody>
+    ${V.map(({x,v})=>`<tr class="clk ${x.i===sel?'sel':''}" data-i="${x.i}"><td>${x.n}</td>${td(v.dira)}${td(v.dirb)}<td class="n">${badge(v.dird)}</td><td class="n">${x.loc[0]?badge(v.locd):'—'}</td><td class="n">${badge(v.regd)}</td>${td(v.totdel)}<td class="n">${badge(v.totd)}</td></tr>`).join('')}
+    </tbody></table></div>
+    <p class="note">Haz clic en una fila para ver el detalle del departamento. «Directas» suma el 20 % y el 5 %.</p>
+  </div>`;
+  $('#dsel').onchange=e=>{sel=+e.target.value; renderTerritorio();};
+  document.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{const k=b.dataset.sort; if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=-1;} renderTerritorio();});
+  document.querySelectorAll('tr.clk').forEach(r=>r.onclick=()=>{sel=+r.dataset.i; renderTerritorio(); window.scrollTo({top:0,behavior:'smooth'});});
+  const dq=$('#dq'); dq.oninput=e=>{q=e.target.value; renderTerritorio(); const n=$('#dq'); n.focus(); n.setSelectionRange(q.length,q.length);};
+  mk('c-dept',{type:'bar',data:{labels:items.map(i=>i[0]),datasets:[
+    {label:'2025-2026',data:items.map(i=>i[1][0]),backgroundColor:col('--s25')},
+    {label:'2027-2028',data:items.map(i=>i[1][1]),backgroundColor:col('--s27')}]},
+    options:{responsive:true,maintainAspectRatio:false,scales:axes(milF,false),plugins:{legend:legendOpts(),tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fl(c.raw)}`}}}}});
+  const rk=[...D].sort((a,b)=>ch(...a.tot)-ch(...b.tot));
+  mk('c-rank',{type:'bar',data:{labels:rk.map(x=>x.n),datasets:[{data:rk.map(x=>ch(...x.tot)*100),
+    backgroundColor:rk.map(x=>x.i===sel?'#c99a2e':(ch(...x.tot)<0?col('--neg'):col('--pos')))}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:axes(v=>L(v,0)+' %',true).x,y:{ticks:{color:col('--ink'),font:{size:11},autoSkip:false},grid:{display:false}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${L(c.raw,1)} %`}}},
+      onClick:(e,els)=>{ if(els.length){ const i=rk[els[0].index].i; setTimeout(()=>{sel=i; renderTerritorio();},0);} }}});
+  mk('c-regs',{type:'bar',data:{labels:reg.map(r=>r.n),datasets:[
+    {label:'2025-2026',data:reg.map(r=>r.a),backgroundColor:col('--s25')},
+    {label:'2027-2028',data:reg.map(r=>r.b),backgroundColor:col('--s27')}]},
+    options:{responsive:true,maintainAspectRatio:false,scales:axes(milF,false),plugins:{legend:legendOpts(),tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${fl(c.raw)}`}}}}});
+}
+
+/* ============ ARTICULADO ============ */
+function renderArticulado(){
+  $('#p-articulado').innerHTML=`
+  <div class="callout"><b>Cómo leerlo:</b> se compara el texto propuesto con la Ley 2441 de 2024. Que un artículo no aparezca no significa que se derogue: puede estar cubierto por la Ley 2056 de 2020 u otra norma. La columna de lectura son hipótesis de trabajo para validar con el equipo, y el texto puede cambiar durante el trámite.</div>
+  <div class="card"><div class="tblwrap"><table class="tbl rd"><thead><tr><th>Tema</th><th>Ley 2441 (2025-2026)</th><th>Texto propuesto (2027-2028)</th><th>Lectura para la Senadora</th></tr></thead><tbody>
+  ${ARTI.map(a=>`<tr><td><b>${a.t}</b></td><td>${a.a}</td><td>${a.b}</td><td>${a.c}</td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+
+/* ============ CONTROL ============ */
+const RENDER={resumen:renderResumen,ingresos:renderIngresos,asignaciones:renderAsignaciones,territorio:renderTerritorio,articulado:renderArticulado};
+function show(tab){
+  currentTab=tab;
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===tab));
+  document.querySelectorAll('section.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+tab));
+  Chart.defaults.font.family="'Public Sans',system-ui,sans-serif";
+  RENDER[tab]();
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+$('#exact').onchange=e=>{exact=e.target.checked; show(currentTab);};
+const rerender=()=>show(currentTab);
+if(window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',rerender);
+new MutationObserver(rerender).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+show('resumen');
+</script>
+</body>
+</html>
